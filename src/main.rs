@@ -170,6 +170,7 @@ impl Obstacle {
         }
     }
 
+    // For Obstacle self.x is initialized to SCREEN_WIDTH
     fn render(&mut self, ctx: &mut BTerm, player_x: i32) {
         let screen_x = self.x - player_x;
         let half_size = self.size / 2;
