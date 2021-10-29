@@ -50,6 +50,12 @@ impl State {
             self.obstacle = Obstacle::new(self.player.x + SCREEN_WIDTH,
                                           self.score);
         }
+
+        // If the player has hit the bottom of the screen or hits the obstacle,
+        // the game is over.
+        //
+        // Recall that (0,0) starts in the top left corner and descends down and
+        // to the right.
         if self.player.y > SCREEN_HEIGHT || self.obstacle.hit_obstacle(&self.player) {
             self.mode = GameMode::End;
         }
@@ -58,6 +64,7 @@ impl State {
     fn dead(&mut self, ctx: &mut BTerm) {
         ctx.cls();
         ctx.print_centered(5, "You are dead!");
+        ctx.print_centered(6, &format!("Your Final Scrore: {}", self.score));
         ctx.print_centered(8, "(P) Play Again");
         ctx.print_centered(9, "(Q) Quit Game");
 
@@ -73,7 +80,9 @@ impl State {
     fn restart(&mut self) {
         self.player = Player::new(5, 25);
         self.frame_time = 0.0;
+        self.obstacle = Obstacle::new(SCREEN_WIDTH, 0);
         self.mode = GameMode::Playing;
+        self.score = 0;
     }
 
     fn main_menu(&mut self, ctx: &mut BTerm) {
