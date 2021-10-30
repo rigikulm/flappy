@@ -8,7 +8,7 @@ enum GameMode {
 
 const SCREEN_WIDTH : i32 = 80;
 const SCREEN_HEIGHT : i32 = 50;
-const FRAME_DURATION : f32 = 75.0;
+const FRAME_DURATION : f32 = 60.0; // Was 75.0
 
 struct State {
     player: Player,
@@ -29,6 +29,15 @@ impl State {
         }
     }
 
+    // This is called by GameState::tick() on each 'tick'
+    // 
+    // The tick function runs as fast as it can—often 60 or more times per
+    // second. Your player doesn’t have superhuman reflexes, so you need to
+    // slow the game down. The context provides a variable named 'frame_time_ms'
+    // containing the time elapsed since the last time tick was called. Add
+    // this to your state’s frame_time. If it exceeds the FRAME_DURATION
+    // constant, then it’s time to run the physics simulation and reset your
+    // frame_time to zero”
     fn play(&mut self, ctx: &mut BTerm) {
         ctx.cls_bg(NAVY);
         self.frame_time += ctx.frame_time_ms;
@@ -102,6 +111,9 @@ impl State {
 }
 
 impl GameState for State {
+    // Bracket-lib defines a trait for games state structures named GameState.
+    // GameState requires that the object implement a tick function. Depending
+    // on the GameMode a different frame handler is called on each tick.
     fn tick(&mut self, ctx: &mut BTerm) {
         match self.mode {
             GameMode::Menu => self.main_menu(ctx),
@@ -182,7 +194,7 @@ impl Obstacle {
                 y,
                 RED,
                 BLACK,
-                to_cp437('|'),
+                to_cp437('/'),
             );
         }
 
@@ -193,7 +205,7 @@ impl Obstacle {
                 y,
                 RED,
                 BLACK,
-                to_cp437('|'),
+                to_cp437('/'),
             );
         }
     }
